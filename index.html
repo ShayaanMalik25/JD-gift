@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Our Story ❤️</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="floating-hearts"></div>
+    <div class="container">
+        <!-- Welcome Screen -->
+        <section class="story-section active" id="welcome">
+            <div class="content">
+                <h1 class="fade-in">Happy Valentine's Day</h1>
+                <p class="subtitle fade-in-delay">A story just for you</p>
+                <button class="btn-continue fade-in-delay-2" onclick="nextSection()">Begin Our Story ❤️</button>
+            </div>
+        </section>
+
+        <!-- Chapter 1: Her -->
+        <section class="story-section" id="chapter1">
+            <div class="image-container">
+                <div class="image-wrapper">
+                    <img src="Girlfriend.jpeg" alt="You" class="story-image">
+                    <div class="image-glow"></div>
+                </div>
+            </div>
+            <div class="text-content">
+                <h2 class="title-animate">You</h2>
+                <p class="text-animate">Every story needs a beginning, and mine started the moment I saw you. Your smile, your warmth, your beautiful soul—you captured my heart completely.</p>
+            </div>
+            <button class="btn-continue" onclick="nextSection()">Continue →</button>
+        </section>
+
+        <!-- Chapter 2: Flowers -->
+        <section class="story-section" id="chapter2">
+            <div class="image-container">
+                <div class="image-wrapper">
+                    <img src="Flowers.jpeg" alt="A Special Gift" class="story-image">
+                    <div class="image-glow"></div>
+                </div>
+            </div>
+            <div class="text-content">
+                <h2 class="title-animate">A Special Moment</h2>
+                <p class="text-animate">Every flower I give you carries a promise—to cherish you, to love you, and to make every day feel as special as you make mine.</p>
+            </div>
+            <button class="btn-continue" onclick="nextSection()">Continue →</button>
+        </section>
+
+        <!-- Chapter 3: Together Now -->
+        <section class="story-section" id="chapter3">
+            <div class="image-container">
+                <div class="image-wrapper">
+                    <img src="Together now.jpeg" alt="Us Together" class="story-image">
+                    <div class="image-glow"></div>
+                </div>
+            </div>
+            <div class="text-content">
+                <h2 class="title-animate">Together Now</h2>
+                <p class="text-animate">In this moment, right here, right now—this is where I want to be. With you, by your side, creating memories that will last forever.</p>
+            </div>
+            <button class="btn-continue" onclick="nextSection()">Continue →</button>
+        </section>
+
+        <!-- Chapter 4: Future -->
+        <section class="story-section" id="chapter4">
+            <div class="image-container">
+                <div class="image-wrapper">
+                    <img src="Together future.jpeg" alt="Our Future" class="story-image">
+                    <div class="image-glow"></div>
+                </div>
+            </div>
+            <div class="text-content">
+                <h2 class="title-animate">Our Future</h2>
+                <p class="text-animate">I see us walking hand in hand through life's journey, building our dreams together, creating a beautiful future—just you and me, forever.</p>
+            </div>
+            <button class="btn-continue" onclick="nextSection()">Continue →</button>
+        </section>
+
+        <!-- Finale -->
+        <section class="story-section" id="finale">
+            <div class="content">
+                <h1 class="fade-in">I Love You</h1>
+                <p class="subtitle fade-in-delay">Today, tomorrow, and always</p>
+                <div class="heart-container fade-in-delay-2">
+                    <span class="heart">❤️</span>
+                    <span class="heart-small heart-1">💕</span>
+                    <span class="heart-small heart-2">💖</span>
+                    <span class="heart-small heart-3">💗</span>
+                    <span class="heart-small heart-4">💝</span>
+                </div>
+                <button class="btn-continue fade-in-delay-3" onclick="restartStory()">Read Again ❤️</button>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
