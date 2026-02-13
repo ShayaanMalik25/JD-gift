@@ -112,17 +112,12 @@ function showSection(index) {
             if (sections[index] === 'valentine-question') {
                 // Reset counters
                 noClickCount = 0;
-                yesButtonScale = 1;
                 
                 // Reset button states
                 const btnNo = document.getElementById('btnNo');
-                const btnYes = document.querySelector('.btn-yes');
                 if (btnNo) {
                     btnNo.textContent = 'No';
                     btnNo.style.transform = 'scale(1)';
-                }
-                if (btnYes) {
-                    btnYes.style.transform = 'scale(1)';
                 }
                 
                 startMovingNoButton();
@@ -257,7 +252,6 @@ window.addEventListener('scroll', () => {
 // Valentine Question Functions
 let noButtonInterval = null;
 let noClickCount = 0;
-let yesButtonScale = 1;
 
 const noButtonMessages = [
     'No',
@@ -274,16 +268,14 @@ const noButtonMessages = [
 
 function startMovingNoButton() {
     const btnNo = document.getElementById('btnNo');
-    const btnYes = document.querySelector('.btn-yes');
-    if (!btnNo || !btnYes) return;
+    if (!btnNo) return;
     
-    // Move button continuously every 2 seconds
-    noButtonInterval = setInterval(() => {
-        moveNoButton();
-    }, 2000);
-    
-    // Also move immediately
-    moveNoButton();
+    // Reset button position to normal (in container)
+    btnNo.style.position = 'relative';
+    btnNo.style.left = 'auto';
+    btnNo.style.top = 'auto';
+    btnNo.style.transform = 'scale(1)';
+    btnNo.style.zIndex = '1';
     
     // Handle click on No button
     btnNo.addEventListener('click', (e) => {
@@ -299,11 +291,7 @@ function startMovingNoButton() {
 
 function handleNoClick() {
     const btnNo = document.getElementById('btnNo');
-    const btnYes = document.querySelector('.btn-yes');
-    if (!btnNo || !btnYes) return;
-    
-    // Move button to new position
-    moveNoButton();
+    if (!btnNo) return;
     
     // Update No button text
     noClickCount++;
@@ -314,38 +302,11 @@ function handleNoClick() {
         btnNo.textContent = noButtonMessages[noButtonMessages.length - 1];
     }
     
-    // Make Yes button grow larger
-    yesButtonScale += 0.15;
-    btnYes.style.transform = `scale(${yesButtonScale})`;
-    btnYes.style.transition = 'transform 0.3s ease';
-    
-    // Make No button smaller
-    btnNo.style.transform = 'scale(0.9)';
+    // Animate No button (shake effect)
+    btnNo.style.animation = 'shake 0.5s ease';
     setTimeout(() => {
-        btnNo.style.transform = 'scale(1)';
-    }, 200);
-}
-
-function moveNoButton() {
-    const btnNo = document.getElementById('btnNo');
-    if (!btnNo) return;
-    
-    // Get viewport dimensions
-    const maxX = window.innerWidth - btnNo.offsetWidth - 40;
-    const maxY = window.innerHeight - btnNo.offsetHeight - 40;
-    
-    // Generate random position (ensure it stays on screen)
-    const randomX = Math.max(20, Math.min(maxX, Math.random() * maxX));
-    const randomY = Math.max(20, Math.min(maxY, Math.random() * maxY));
-    
-    // Add moving class to disable transitions
-    btnNo.classList.add('moving');
-    
-    // Move button to random position using fixed positioning
-    btnNo.style.position = 'fixed';
-    btnNo.style.left = randomX + 'px';
-    btnNo.style.top = randomY + 'px';
-    btnNo.style.zIndex = '10000';
+        btnNo.style.animation = '';
+    }, 500);
 }
 
 function handleYes() {
