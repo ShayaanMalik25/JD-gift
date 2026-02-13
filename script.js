@@ -1,5 +1,5 @@
 let currentSection = 0;
-const sections = ['welcome', 'chapter1', 'chapter2', 'chapter3', 'chapter4', 'finale'];
+const sections = ['welcome', 'chapter1', 'chapter2', 'chapter3', 'chapter4', 'valentine-question', 'finale'];
 
 function initStory() {
     // Show welcome screen first
@@ -69,6 +69,12 @@ function createFloatingHearts() {
 }
 
 function showSection(index) {
+    // Stop moving button if leaving valentine question
+    if (noButtonInterval && sections[index] !== 'valentine-question') {
+        clearInterval(noButtonInterval);
+        noButtonInterval = null;
+    }
+    
     // Hide all sections with animation
     sections.forEach((sectionId, i) => {
         const section = document.getElementById(sectionId);
@@ -101,6 +107,26 @@ function showSection(index) {
         // Add entrance animation
         setTimeout(() => {
             currentSectionElement.classList.add('active');
+            
+            // Start moving No button if it's the valentine question section
+            if (sections[index] === 'valentine-question') {
+                // Reset counters
+                noClickCount = 0;
+                yesButtonScale = 1;
+                
+                // Reset button states
+                const btnNo = document.getElementById('btnNo');
+                const btnYes = document.querySelector('.btn-yes');
+                if (btnNo) {
+                    btnNo.textContent = 'No';
+                    btnNo.style.transform = 'scale(1)';
+                }
+                if (btnYes) {
+                    btnYes.style.transform = 'scale(1)';
+                }
+                
+                startMovingNoButton();
+            }
             
             // Trigger image animation
             const imageWrapper = currentSectionElement.querySelector('.image-wrapper');
@@ -227,3 +253,213 @@ window.addEventListener('scroll', () => {
     }
     lastScrollY = window.pageYOffset;
 }, { passive: true });
+
+// Valentine Question Functions
+let noButtonInterval = null;
+let noClickCount = 0;
+let yesButtonScale = 1;
+
+const noButtonMessages = [
+    'No',
+    'Are you sure?',
+    'Pookie please',
+    'Really?',
+    'I\'m gonna cry...',
+    'Please?',
+    'Don\'t do this',
+    'Last chance!',
+    'Pretty please?',
+    'I\'m begging you'
+];
+
+function startMovingNoButton() {
+    const btnNo = document.getElementById('btnNo');
+    const btnYes = document.querySelector('.btn-yes');
+    if (!btnNo || !btnYes) return;
+    
+    // Move button continuously every 2 seconds
+    noButtonInterval = setInterval(() => {
+        moveNoButton();
+    }, 2000);
+    
+    // Also move immediately
+    moveNoButton();
+    
+    // Handle click on No button
+    btnNo.addEventListener('click', (e) => {
+        e.preventDefault();
+        handleNoClick();
+    });
+    
+    btnNo.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        handleNoClick();
+    });
+}
+
+function handleNoClick() {
+    const btnNo = document.getElementById('btnNo');
+    const btnYes = document.querySelector('.btn-yes');
+    if (!btnNo || !btnYes) return;
+    
+    // Move button to new position
+    moveNoButton();
+    
+    // Update No button text
+    noClickCount++;
+    if (noClickCount < noButtonMessages.length) {
+        btnNo.textContent = noButtonMessages[noClickCount];
+    } else {
+        // Cycle back or keep last message
+        btnNo.textContent = noButtonMessages[noButtonMessages.length - 1];
+    }
+    
+    // Make Yes button grow larger
+    yesButtonScale += 0.15;
+    btnYes.style.transform = `scale(${yesButtonScale})`;
+    btnYes.style.transition = 'transform 0.3s ease';
+    
+    // Make No button smaller
+    btnNo.style.transform = 'scale(0.9)';
+    setTimeout(() => {
+        btnNo.style.transform = 'scale(1)';
+    }, 200);
+}
+
+function moveNoButton() {
+    const btnNo = document.getElementById('btnNo');
+    if (!btnNo) return;
+    
+    // Get viewport dimensions
+    const maxX = window.innerWidth - btnNo.offsetWidth - 40;
+    const maxY = window.innerHeight - btnNo.offsetHeight - 40;
+    
+    // Generate random position (ensure it stays on screen)
+    const randomX = Math.max(20, Math.min(maxX, Math.random() * maxX));
+    const randomY = Math.max(20, Math.min(maxY, Math.random() * maxY));
+    
+    // Add moving class to disable transitions
+    btnNo.classList.add('moving');
+    
+    // Move button to random position using fixed positioning
+    btnNo.style.position = 'fixed';
+    btnNo.style.left = randomX + 'px';
+    btnNo.style.top = randomY + 'px';
+    btnNo.style.zIndex = '10000';
+}
+
+function handleYes() {
+    // Stop the moving interval
+    if (noButtonInterval) {
+        clearInterval(noButtonInterval);
+        noButtonInterval = null;
+    }
+    
+    // Create confetti effect
+    createConfetti();
+    
+    // Show simple "Yayyyyyyyy!" message
+    const valentineSection = document.getElementById('valentine-question');
+    if (valentineSection) {
+        const content = valentineSection.querySelector('.content');
+        if (content) {
+            content.innerHTML = `
+                <h1 class="fade-in" style="font-size: clamp(3rem, 10vw, 6rem); animation: bounceIn 0.8s ease;">Yayyyyyyyy! 🎉</h1>
+                <p class="subtitle fade-in-delay" style="font-size: clamp(1.5rem, 5vw, 2.5rem);">You made me the happiest! ❤️</p>
+                <div class="heart-container fade-in-delay-2">
+                    <span class="heart">❤️</span>
+                    <span class="heart-small heart-1">💕</span>
+                    <span class="heart-small heart-2">💖</span>
+                    <span class="heart-small heart-3">💗</span>
+                    <span class="heart-small heart-4">💝</span>
+                </div>
+                <button class="btn-continue fade-in-delay-3" onclick="showFinale()">Continue ❤️</button>
+            `;
+        }
+    }
+}
+
+function showFinale() {
+    showSection(sections.indexOf('finale'));
+}
+
+function createConfetti() {
+    const colors = ['#ff6b9d', '#ffc0cb', '#ff69b4', '#ff1493', '#ffb6c1', '#ff69b4'];
+    const confettiCount = 100;
+    
+    for (let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement('div');
+        confetti.style.position = 'fixed';
+        confetti.style.width = Math.random() * 10 + 5 + 'px';
+        confetti.style.height = Math.random() * 10 + 5 + 'px';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.top = '-10px';
+        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0%';
+        confetti.style.zIndex = '9999';
+        confetti.style.pointerEvents = 'none';
+        confetti.style.opacity = Math.random() * 0.8 + 0.2;
+        
+        document.body.appendChild(confetti);
+        
+        // Animate confetti falling
+        const animationDuration = Math.random() * 2 + 2;
+        const horizontalMovement = (Math.random() - 0.5) * 200;
+        
+        confetti.animate([
+            {
+                transform: `translate(0, 0) rotate(0deg)`,
+                opacity: 1
+            },
+            {
+                transform: `translate(${horizontalMovement}px, ${window.innerHeight + 100}px) rotate(720deg)`,
+                opacity: 0
+            }
+        ], {
+            duration: animationDuration * 1000,
+            easing: 'cubic-bezier(0.5, 0, 0.5, 1)'
+        });
+        
+        // Remove confetti after animation
+        setTimeout(() => {
+            confetti.remove();
+        }, animationDuration * 1000);
+    }
+    
+    // Add heart emojis falling
+    const heartEmojis = ['❤️', '💕', '💖', '💗', '💝', '💓', '💞'];
+    for (let i = 0; i < 30; i++) {
+        const heart = document.createElement('div');
+        heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+        heart.style.position = 'fixed';
+        heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.top = '-50px';
+        heart.style.zIndex = '9999';
+        heart.style.pointerEvents = 'none';
+        heart.style.opacity = 0.8;
+        
+        document.body.appendChild(heart);
+        
+        const animationDuration = Math.random() * 2 + 2;
+        const horizontalMovement = (Math.random() - 0.5) * 300;
+        
+        heart.animate([
+            {
+                transform: `translate(0, 0) rotate(0deg) scale(1)`,
+                opacity: 0.8
+            },
+            {
+                transform: `translate(${horizontalMovement}px, ${window.innerHeight + 100}px) rotate(360deg) scale(1.5)`,
+                opacity: 0
+            }
+        ], {
+            duration: animationDuration * 1000,
+            easing: 'cubic-bezier(0.5, 0, 0.5, 1)'
+        });
+        
+        setTimeout(() => {
+            heart.remove();
+        }, animationDuration * 1000);
+    }
+}

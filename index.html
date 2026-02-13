@@ -78,6 +78,17 @@
             <button class="btn-continue" onclick="nextSection()">Continue →</button>
         </section>
 
+        <!-- Valentine Question -->
+        <section class="story-section" id="valentine-question">
+            <div class="content">
+                <h1 class="fade-in">Will you be my Valentine?</h1>
+                <div class="button-container fade-in-delay">
+                    <button class="btn-yes" onclick="handleYes()">Yes ❤️</button>
+                    <button class="btn-no" id="btnNo">No</button>
+                </div>
+            </div>
+        </section>
+
         <!-- Finale -->
         <section class="story-section" id="finale">
             <div class="content">
@@ -91,6 +102,22 @@
                     <span class="heart-small heart-4">💝</span>
                 </div>
                 <button class="btn-continue fade-in-delay-3" onclick="restartStory()">Read Again ❤️</button>
+            </div>
+        </section>
+
+        <!-- Yes Response -->
+        <section class="story-section" id="yes-response">
+            <div class="content">
+                <h1 class="fade-in">Yay! 🎉</h1>
+                <p class="subtitle fade-in-delay">You made me the happiest person!</p>
+                <div class="heart-container fade-in-delay-2">
+                    <span class="heart">❤️</span>
+                    <span class="heart-small heart-1">💕</span>
+                    <span class="heart-small heart-2">💖</span>
+                    <span class="heart-small heart-3">💗</span>
+                    <span class="heart-small heart-4">💝</span>
+                </div>
+                <button class="btn-continue fade-in-delay-3" onclick="showFinale()">Continue ❤️</button>
             </div>
         </section>
     </div>
